@@ -1,0 +1,189 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #e0f2f7; /* Light blue background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    font-size: 18px;
+    padding: 20px;
+    flex-direction: column;
+}
+
+.app-container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 90%;
+    max-width: 600px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.header {
+    width: 100%;
+    display: flex;
+    flex-direction: column; /* Stack title and problem count */
+    align-items: center; /* Center items horizontally */
+    margin-bottom: 10px;
+}
+
+h1 {
+    color: #333;
+    font-size: 1.8em;
+    margin: 0;
+}
+
+.problem-count {
+    font-size: 1.2em;
+    color: #555;
+    margin-top: 5px; /* Add some space between title and problem count */
+}
+
+.timer {
+    font-size: 1.2em;
+    color: #dc3545;
+    margin-bottom: 10px;
+    display: none;
+}
+
+.problem-container {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.problem-container h2 {
+    color: #555;
+    margin-bottom: 10px;
+    font-size: 1.4em;
+}
+
+.problem-container #problem {
+    font-size: 1.6em;
+    color: #333;
+    margin-bottom: 20px;
+    white-space: pre;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.problem-container #problem span {
+    margin: 5px 0;
+}
+
+.problem-container input {
+    padding: 12px; /* Slightly bigger text box */
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-right: 0;
+    width: 80%;
+    max-width: 250px; /* Increased max width */
+    font-size: 1.1em;
+    margin-bottom: 10px;
+    overflow: hidden;
+}
+
+/* Hide the number arrows for number input */
+.problem-container input[type=number]::-webkit-inner-spin-button,
+.problem-container input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.problem-container input[type=number] {
+    -moz-appearance: textfield;
+}
+
+.problem-container button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #28a745;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 1.1em;
+}
+
+.problem-container button:hover {
+    background-color: #218838;
+}
+
+.result {
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    font-size: 1.1em;
+}
+
+.result.correct {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.result.incorrect {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.score-tracker {
+    font-size: 1.2em;
+    color: #007bff;
+}
+
+.end-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 1.3em;
+}
+
+.end-screen h2 {
+    font-size: 1.8em;
+    margin-bottom: 20px;
+}
+
+.end-screen p {
+    margin-bottom: 10px;
+}
+
+.end-screen button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 1.1em;
+}
+
+.end-screen button:hover {
+    background-color: #0056b3;
+}
+
+footer {
+    text-align: center;
+    padding: 10px;
+    font-size: 1em;
+    color: #555;
+}

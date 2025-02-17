@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3-Digit Math Fun</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <div class="header">
+            <h1>3-Digit Math Fun</h1>
+            <div id="problem-count" class="problem-count">Problem 1/20</div>
+        </div>
+
+        <div id="timer" class="timer">Time Left: 30 seconds</div>
+
+        <div class="problem-container">
+            <div id="problem">
+                <span id="num1"></span>
+                <span id="operator"></span>
+                <span id="num2"></span>
+            </div>
+            <input type="number" id="answer" placeholder="Your answer" inputmode="numeric">
+            <button id="check-answer-btn">Check Answer</button>
+        </div>
+
+        <div id="result" class="result"></div>
+
+        <div class="score-tracker">
+            Score: <span id="score">0</span>
+        </div>
+
+        <div id="end-screen" class="end-screen">
+            <h2>Round Complete!</h2>
+            <p>You got <span id="correct-problems"></span> out of 20 problems correct!</p>
+            <p id="feedback"></p>
+            <button id="restart-btn">Play Again</button>
+        </div>
+
+        <footer>
+            Developed by Quintin
+        </footer>
+    </div>
+
+    <script>
+        const num1Element = document.getElementById('num1');
+        const num2Element = document.getElementById('num2');
+        const operatorElement = document.getElementById('operator');
+        const answerInput = document.getElementById('answer');
+        const checkAnswerBtn = document.getElementById('check-answer-btn');
+        const resultDiv = document.getElementById('result');
+        const scoreSpan = document.getElementById('score');
+        const timerDiv = document.getElementById('timer');
+        const endScreen = document.getElementById('end-screen');
+        const correctProblemsSpan = document.getElementById('correct-problems');
+        const feedbackParagraph = document.getElementById('feedback');
+        const restartBtn = document.getElementById('restart-btn');
+        const problemCountDisplay = document.getElementById('problem-count');
+
+        let num1, num2, operator, correctAnswer, score = 0, problemCount = 0, mode = 'practice', timeLeft = 30, gameActive = false;
+        let problems = []; // Array to store generated problems
+
+        function getRandomNumber(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function generateProblem() {
+            num1 = getRandomNumber(190, 800);
+            num2 = getRandomNumber(190, 800);
+            operator = Math.random() < 0.5 ? '+' : '-';
+
+            if (operator === '+') {
+                while (num1 + num2 >= 1000) {
+                    num1 = getRandomNumber(190, 800);
+                    num2 = getRandomNumber(190, 800);
+                }
+            } else {
+                if (num2 > num1) {
+                    let temp = num1;
+                    num1 = num2;
+                    num2 = temp;
+                }
+            }
+
+            if (num2 > num1) {
+                let temp = num1;
+                num1 = num2;
+                num2 = temp;
+            }
+
+            correctAnswer = operator === '+' ? num1 + num2 : num1 - num2;
+
+            return {
+                num1: num1,
+                num2: num2,
+                operator: operator,
+                correctAnswer: correctAnswer
+            };
+        }
+
+        function generateProblems(count) {
+            problems = [];
+            for (let i = 0; i < count; i++) {
+                problems.push(generateProblem());
+            }
+        }
+
+        function displayProblem() {
+            if (problems.length > 0) {
+                const problem = problems[0];
+                num1 = problem.num1;
+                num2 = problem.num2;
+                operator = problem.operator;
+                correctAnswer = problem.correctAnswer;
+
+                num1Element.textContent = num1;
+                num2Element.textContent = num2;
+                operatorElement.textContent = operator;
+            }
+        }
+
+        function checkAnswer() {
+            const userAnswer = parseInt(answerInput.value);
+
+            if (!isNaN(userAnswer)) {
+                if (userAnswer === correctAnswer) {
+                    resultDiv.textContent = 'Correct!';
+                    resultDiv.className = 'result correct';
+                    score++;
+                    // Launch confetti
+                    confetti({
+                        particleCount: 100,
+                        spread: 70,
+                        origin: { y: 0.6 }
+                    });
+                } else {
+                    resultDiv.textContent = `The correct answer is ${correctAnswer}`;
+                    resultDiv.className = 'result incorrect';
+                }
+                scoreSpan.textContent = score;
+                problemCount++;
+                updateProblemCountDisplay();
+                answerInput.value = '';
+
+                problems.shift(); // Remove the problem from the array
+                if (problemCount < 20) {
+                    displayProblem();
+                } else {
+                    endRound();
+                }
+            } else {
+                resultDiv.textContent = 'Please enter a valid number.';
+                resultDiv.className = 'result';
+            }
+        }
+
+        function endRound() {
+            gameActive = false;
+            timerDiv.style.display = 'none';
+            const problemContainer = document.querySelector('.problem-container');
+            problemContainer.style.display = 'none';
+            endScreen.style.display = 'block';
+            correctProblemsSpan.textContent = score;
+
+            let feedback = '';
+            if (score >= 15) {
+                feedback = "Great job! You're a math whiz!";
+            } else if (score >= 10) {
+                feedback = "Not bad! Keep practicing and you'll get there!";
+            } else {
+                feedback = "Keep trying! Math can be fun!";
+            }
+            feedbackParagraph.textContent = feedback;
+        }
+
+        function updateProblemCountDisplay() {
+            problemCountDisplay.textContent = `Problem ${problemCount + 1}/20`;
+        }
+
+        checkAnswerBtn.addEventListener('click', checkAnswer);
+        restartBtn.addEventListener('click', () => {
+            resetGame();
+        });
+
+        function resetGame() {
+            score = 0;
+            problemCount = 0;
+            updateProblemCountDisplay();
+            scoreSpan.textContent = score;
+            resultDiv.textContent = '';
+            resultDiv.className = 'result';
+
+            const problemContainer = document.querySelector('.problem-container');
+            problemContainer.style.display = 'block';
+            endScreen.style.display = 'none';
+
+            generateProblems(20);
+            // Shuffle the problems array
+            problems.sort(() => Math.random() - 0.5);
+            displayProblem();
+        }
+
+        // Initialize the game
+        function initGame() {
+            generateProblems(20);
+            // Shuffle the problems array
+            problems.sort(() => Math.random() - 0.5);
+            displayProblem();
+        }
+
+        initGame();
+    </script>
+</body>
+</html>
